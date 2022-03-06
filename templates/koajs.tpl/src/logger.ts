@@ -1,29 +1,33 @@
 import {Context} from 'koa';
-import {transports, format} from 'winston';
+import winston, {transports, format} from 'winston';
 import * as path from 'path';
 
-const logger = (winstonInstance: any): any => {
+const logger = (
+    winstonInstance: typeof winston,
+): // eslint-disable-next-line @typescript-eslint/no-explicit-any
+((ctx: Context, next: () => Promise<any>) => void) => {
   winstonInstance.configure({
-    level: process.env.LOG_LEVEL ? 'debug' : 'info',
+    level: process.env.LOG_LEVEL ? process.env.LOG_LEVEL : 'info',
     transports: [
-      //
-      // - Write all logs error (and below) to `error.log`.
       new transports.File({
-        filename: path.resolve(__dirname, '../error.log'),
+        filename: path.resolve(
+            __dirname,
+          process.env.LOG_FILE ? process.env.LOG_FILE : '../error.log',
+        ),
         level: 'error',
       }),
-      //
-      // - Write to all logs with specified level to console.
       new transports.Console({
         format: format.combine(format.colorize(), format.simple()),
       }),
     ],
   });
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   return async (ctx: Context, next: () => Promise<any>): Promise<void> => {
     const start = new Date().getTime();
     try {
       await next();
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       ctx.status = err.status || 500;
       ctx.body = err.message;
