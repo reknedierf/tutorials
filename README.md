@@ -1,2 +1,1 @@
-# tutorials
-Tutorials collecltion.
+# A collection of code examples created for tutorial
