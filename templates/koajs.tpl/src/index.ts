@@ -6,7 +6,7 @@ import json from 'koa-json';
 import cors from 'koa-cors';
 import winston from 'winston';
 
-const app = new Koa();
+export const app = new Koa();
 const port: number = process.env.PORT as unknown as number || 3000;
 
 app
@@ -16,7 +16,9 @@ app
     .use(router.routes())
     .use(router.allowedMethods());
 
-app.listen(port, () => {
+export const server = app.listen(port, () => {
   console.info('webserver started on port ',
       port);
 });
+
+
