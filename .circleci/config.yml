@@ -13,6 +13,7 @@ executors:
     docker:
     - image: cimg/node:16.10
     working_directory: ~/project/templates/koajs.tpl
+    app-dir: ~/project/templates/koajs.tpl
 
 jobs:
   # Below is the definition of your job to build and test your app, you can rename and customize it as you want.
