@@ -12,18 +12,21 @@ executors:
   koa-tpl:
     docker:
     - image: cimg/node:16.10
-    working_directory: ~/project/templates/koajs.tpl
-    app-dir: ~/project/templates/koajs.tpl
+    working_directory: ~/tutorials/templates/koajs.tpl
 
 jobs:
   # Below is the definition of your job to build and test your app, you can rename and customize it as you want.
   build-and-test-koa-tpl:
     executor: koa-tpl
     steps:
-      - checkout
+      - checkout:
+          path: ~/tutorials
       - node/install-packages:
           # If you are using yarn, change the line below from "npm" to "yarn"
           pkg-manager: npm
+      - run:
+          name: Test
+          command: ls -la
       - run:
           name: Run tests
           command: npm test
@@ -33,7 +36,7 @@ workflows:
   # Inside the workflow, you provide the jobs you want to run, e.g this workflow runs the build-and-test job above.
   # CircleCI will run this workflow on every commit.
   # For more details on extending your workflow, see the configuration docs: https://circleci.com/docs/2.0/configuration-reference/#workflows
-  sample:
+  test-all:
     jobs:
       - build-and-test-koa-tpl
       # For running simple node tests, you could optionally use the node/test job from the orb to replicate and replace the job above in fewer lines.
